@@ -1,53 +1,49 @@
 const express = require('express');
 const app = express();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient } = require('mongodb');
 
-//* Variabili d'ambiente
 require('dotenv').config();
+
 const PORT = process.env.PORT || 3000;
-const DB_PORT = process.env.DB_PORT || 27017;
 const DB_NAME = process.env.DB_NAME;
-const DB_HOST_LOCAL = `mongodb://127.0.0.1:${DB_PORT}/${DB_NAME}` || `mongodb://localhost:${DB_PORT}/${DB_NAME}`;
 
-const DB_USERNAME = process.env.DB_USERNAME;
-const DB_PASSWORD = process.env.DB_PASSWORD;
+//* Creare una nuova istanza MongoClient
+const localMongo = new MongoClient('mongodb://127.0.0.1:27017/' + DB_NAME);
 
-//app.use(express.json());
+async function connectToDatabase() {
+    await localMongo.connect();
+    console.log(`Connesso al database locale ${DB_NAME}`);
+}
+
+//* Avviare la connessione al database prima di avviare il server Express
+connectToDatabase();
 app.listen(PORT, () => {
     console.log(`Server in ascolto sulla porta ${PORT}`);
 });
 
 
-//% Connessione locale a MongoDB
-const localMongo = new MongoClient(DB_HOST_LOCAL);
 
-async function run() {
+app.get('/test-insert', async (req, res) => {
     try {
-        await localMongo.connect();
-        console.log(`Connesso al database locale ${DB_NAME}`);
-    } finally {
-        await localMongo.close();
-    }
-}
-run().catch(console.dir);
-
-
-//% Connessione MongoDB su Atlas
-const DB_HOST_ATLAS = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@ruma-mongodb.dxkpv97.mongodb.net/?retryWrites=true&w=majority`;
-/* const client = new MongoClient(DB_HOST_ATLAS || DB_HOST_LOCAL, {
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
+        const db = localMongo.db(DB_NAME);
+        const collection = db.collection('testCollection');
+        const insertResult = await collection.insertOne({ testField: 'testValue' });
+        res.send(insertResult);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Errore durante l\'inserimento dei dati');
     }
 });
-async function run() {
+
+
+app.get('/test-read', async (req, res) => {
     try {
-        await client.connect();
-        await client.db("admin").command({ ping: 1 });
-        console.log("Connesso a MongoDB Locale");
-    } finally {
-        await client.close();
+        const db = localMongo.db(DB_NAME);
+        const collection = db.collection('testCollection');
+        const documents = await collection.find({}).toArray();
+        res.send(documents);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Errore durante la lettura dei dati');
     }
-}
-run().catch(console.dir); */
+});
