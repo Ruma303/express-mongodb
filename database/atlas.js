@@ -1,11 +1,11 @@
     const { MongoClient, ServerApiVersion } = require('mongodb');
     require('dotenv').config();
-
     const DB_USERNAME = encodeURIComponent(process.env.DB_USERNAME);
     const DB_PASSWORD = encodeURIComponent(process.env.DB_PASSWORD);
     const DB_NAME = encodeURIComponent(process.env.DB_NAME);
-    const DB_CLUSTER = encodeURIComponent(process.env.DB_CLUSTER);
-    const ATLAS_DRIVER = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@${DB_CLUSTER}.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
+    const DB_ATLAS = encodeURIComponent(process.env.DB_ATLAS);
+    const ATLAS_DRIVER = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@${DB_ATLAS}.dxkpv97.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
+    console.log(ATLAS_DRIVER);
 
     const atlas = new MongoClient(ATLAS_DRIVER, {
         serverApi: {
