@@ -13,19 +13,10 @@ app.set('views', path.join(__dirname, 'views'))
     .use(express.urlencoded({ extended: true }));
 
 //, Importazione Rotte
-const userRoutes = require('./Routes/userRoutes');
-app.use(userRoutes);
-
-
-
+    const userRoutes = require('./Routes/userRoutes');
+    app.use('/users', userRoutes);
 
 //% Connessione a MongoDB tramite Mongoose
-//# Usando then() e catch()
-/* mongoose.connect(`mongodb://localhost:${DB_PORT}/${DB_NAME}`)
-.then(() => console.log(`Connessione al database ${DB_NAME} riuscita`))
-.catch(err => console.error('Errore di connessione al database:', err)); */
-
-//# Usando async e await
 (async function run() {
     try {
         await mongoose.connect(`mongodb://localhost:${DB_PORT}/${DB_NAME}`);
