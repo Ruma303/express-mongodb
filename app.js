@@ -7,14 +7,12 @@ const PORT = process.env.PORT || 3000;
 const DB_PORT = process.env.DB_PORT || 27017;
 const DB_NAME = process.env.DB_NAME || 'mongoose';
 
-app.set('views', path.join(__dirname, 'views'))
-    .set('view engine', 'ejs')
-    .use(express.json())
+app.use(express.json())
     .use(express.urlencoded({ extended: true }));
 
 //, Importazione Rotte
-    const userRoutes = require('./Routes/userRoutes');
-    app.use('/users', userRoutes);
+const userRoutes = require('./Routes/userRoutes');
+app.use('/users', userRoutes);
 
 //% Connessione a MongoDB tramite Mongoose
 (async function run() {

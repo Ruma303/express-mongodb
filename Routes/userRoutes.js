@@ -4,10 +4,8 @@
 
     module.exports = router
         .get('/', userController.index)
-        .get('/create', userController.create)
         .post('/', userController.store)
         .get('/:id', userController.show)
-        .get('/:id/edit', userController.edit)
         .put('/:id', userController.update)
         .delete('/:id', userController.destroy);
 
