@@ -45,7 +45,7 @@ app.get('/', async (req, res) => {
 
 
 //, Testare connessione atlas
-/* app.get('/', async (req, res) => {
+/* app.get('/users', async (req, res) => {
     try {
         const db = atlas.db(DB_NAME);
         const collection = db.collection('users');
