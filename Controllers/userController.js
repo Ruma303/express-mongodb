@@ -16,15 +16,16 @@ index = async (req, res, next) => {
 // Mostrare singolo utente
 show = async (req, res, next) => {
     try {
-        const user = await User.findOne({ name: req.params.name });
+        const user = await User.findById(req.params.id);
         if (!user) {
-            return res.status(404).send(`Utente ${user} non trovato`);
+            return res.status(404).send(`Utente con id: ${req.params.id} non trovato`);
         }
         res.render('user', { user });
     } catch (err) {
         return next(err);
     }
 };
+
 
 // Creare nuovo utente
 create = (req, res) => {
@@ -43,15 +44,26 @@ store = async (req, res, next) => {
     }
 };
 
-// Creare nuovo utente
-edit = (req, res) => {
-    res.render('edit');
+// Aggiornare un utente esistente
+edit = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).send(`Utente non trovato`);
+        }
+        res.render('edit', { user });
+    } catch (err) {
+        return next(err);
+    }
 };
 
 // Aggiornare utente
 update = async (req, res, next) => {
     try {
-        const user = await User.findOneAndUpdate({ name: req.params.name }, req.body, { new: true });
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!user) {
+            return res.status(404).send('Utente non trovato');
+        }
         res.status(200).send('Utente aggiornato');
     } catch (err) {
         return next(err);

@@ -13,8 +13,13 @@ app.set('views', path.join(__dirname, 'views'))
     .use(express.urlencoded({ extended: true }));
 
 //, Importazione Rotte
-    const userRoutes = require('./Routes/userRoutes');
-    app.use('/users', userRoutes);
+app.get('/', (req, res) => {
+    res.render('home');
+});
+const userRoutes = require('./Routes/userRoutes');
+app.use('/users', userRoutes);
+
+
 
 //% Connessione a MongoDB tramite Mongoose
 (async function run() {
