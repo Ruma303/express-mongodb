@@ -39,7 +39,8 @@
         }
     };
 
-    // Aggiornare utente
+    
+    // Aggiornare utente con findByIdAndUpdate()
     const update = async (req, res, next) => {
         try {
             const user = await User.findByIdAndUpdate(req.params.id, {
@@ -57,6 +58,26 @@
         }
     };
 
+
+    // Aggiornare utente con findOne()
+    const update2 = async (req, res, next) => {
+        try {
+            const user = await User.findOne({ _id: req.params.id });
+            if (!user) {
+                return res.status(404).json({ message: `Utente con ID ${req.params.id} non trovato` });
+            }
+            user.name = req.body.name;
+            user.age = req.body.age;
+            user.email = req.body.email;
+            user.password = req.body.password;
+            const updatedUser = await user.save();
+            res.json(updatedUser);
+        } catch (err) {
+            next(err);
+        }
+    };
+
+
     // Eliminare utente
     const destroy = async (req, res, next) => {
         try {
@@ -70,4 +91,4 @@
         }
     };
 
-    module.exports = { index, show, store, update, destroy };
+    module.exports = { index, show, store, update, update2, destroy };

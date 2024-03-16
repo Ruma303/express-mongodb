@@ -7,7 +7,7 @@
         .post('/', userController.store)
         .get('/:id', userController.show)
         .put('/:id', userController.update)
+        .put('/:age', userController.update2)
         .delete('/:id', userController.destroy);
 
 
-        
