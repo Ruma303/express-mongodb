@@ -1,94 +1,37 @@
-    const User = require('../Models/User');
+const User = require('../Models/User');
 
-    // Mostra tutti gli utenti
-    const index = async (req, res, next) => {
-        try {
-            const users = await User.find({});
-            res.json(users);
-        } catch (err) {
-            next(err);
-        }
-    };
+const getUsersByAge = async () => {
+    try {
+        const users = await User.find({ age: { $gte: 20, $lte: 30 } }).select('email');
+        console.log(users);
+    } catch (err) {
+        throw err;
+    }
+};
+const getUsersSortedByName = async () => {
+    try {
+        const users = await User.find().sort('name');
+        console.log(users);
+    } catch (err) {
+        throw err;
+    }
+};
+const countUsersAboveAge = async () => {
+    try {
+        const count = await User.countDocuments({ age: { $gt: 20 } });
+        console.log('Numero di utenti con più di 20 anni:', count);
+    } catch (err) {
+        throw err;
+    }
+};
 
-    // Mostrare singolo utente
-    const show = async (req, res, next) => {
-        try {
-            const user = await User.findById(req.params.id);
-            if (!user) {
-                return res.status(404).json({ message: `Utente con ID ${req.params.id} non trovato` });
-            }
-            res.json(user);
-        } catch (err) {
-            next(err);
-        }
-    };
+const updateUserEmail = async () => {
+    try {
+        const result = await User.updateOne({ name: 'John Doe' }, { email: 'john.doe@example.com' });
+        console.log(result);
+    } catch (err) {
+        throw err;
+    }
+};
 
-    // Creare nuovo utente
-    const store = async (req, res, next) => {
-        try {
-            const newUser = new User({
-                name: req.body.name,
-                age: req.body.age,
-                email: req.body.email,
-                password: req.body.password
-            });
-            const user = await newUser.save();
-            res.status(201).json(user);
-        } catch (err) {
-            next(err);
-        }
-    };
-
-    
-    // Aggiornare utente con findByIdAndUpdate()
-    const update = async (req, res, next) => {
-        try {
-            const user = await User.findByIdAndUpdate(req.params.id, {
-                name: req.body.name,
-                age: req.body.age,
-                email: req.body.email,
-                password: req.body.password
-            }, { new: true });
-            if (!user) {
-                return res.status(404).json({ message: `Utente con ID ${req.params.id} non trovato` });
-            }
-            res.json(user);
-        } catch (err) {
-            next(err);
-        }
-    };
-
-
-    // Aggiornare utente con findOne()
-    const update2 = async (req, res, next) => {
-        try {
-            const user = await User.findOne({ _id: req.params.id });
-            if (!user) {
-                return res.status(404).json({ message: `Utente con ID ${req.params.id} non trovato` });
-            }
-            user.name = req.body.name;
-            user.age = req.body.age;
-            user.email = req.body.email;
-            user.password = req.body.password;
-            const updatedUser = await user.save();
-            res.json(updatedUser);
-        } catch (err) {
-            next(err);
-        }
-    };
-
-
-    // Eliminare utente
-    const destroy = async (req, res, next) => {
-        try {
-            const user = await User.findByIdAndDelete(req.params.id);
-            if (!user) {
-                return res.status(404).json({ message: `Utente con ID ${req.params.id} non trovato` });
-            }
-            res.status(204).end();
-        } catch (err) {
-            next(err);
-        }
-    };
-
-    module.exports = { index, show, store, update, update2, destroy };
+module.exports = { getUsersByAge, getUsersSortedByName, countUsersAboveAge, updateUserEmail };
