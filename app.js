@@ -9,6 +9,7 @@ require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const DB_PORT = process.env.DB_PORT || 27017;
 const DB_NAME = process.env.DB_NAME || 'mongoose';
+const SESSION_SECRET = process.env.SESSION_SECRET || 'secret';
 
 app.set('views', path.join(__dirname, 'views'))
     .set('view engine', 'ejs')
@@ -17,15 +18,16 @@ app.set('views', path.join(__dirname, 'views'))
     .use(express.urlencoded({ extended: true }))
     .set('trust proxy', 1)
     .use(session({
-        secret: process.env.SESSION_SECRET,
+        secret: SESSION_SECRET,
         resave: false,
         saveUninitialized: true
     }))
-    .use((res, req, next) => {
-        res.locals.user = req.session.user;
-        delete req.session.user;
+    /* .use((res, req, next) => {
+        console.log(res.locals)
+        res.locals.message = req.session.message;
+        delete req.session.message;
         next();
-    })
+    }) */
 
 
 //, Rotte
