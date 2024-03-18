@@ -1,5 +1,8 @@
 const express = require('express'), mongoose = require('mongoose'),
-app = express(), path = require('path');
+      app = express(), path = require('path');
+
+const session = require('express-session');
+
 
 //, Settaggio APP
 require('dotenv').config();
@@ -9,16 +12,27 @@ const DB_NAME = process.env.DB_NAME || 'mongoose';
 
 app.set('views', path.join(__dirname, 'views'))
     .set('view engine', 'ejs')
+    .use(express.static(path.join(__dirname, 'public')))
     .use(express.json())
-    .use(express.urlencoded({ extended: true }));
+    .use(express.urlencoded({ extended: true }))
+    .set('trust proxy', 1)
+    .use(session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: true
+    }))
+    .use((res, req, next) => {
+        res.locals.user = req.session.user;
+        delete req.session.user;
+        next();
+    })
 
-//, Importazione Rotte
+
+//, Rotte
 app.get('/', (req, res) => {
     res.render('home');
 });
-const userRoutes = require('./Routes/userRoutes');
-app.use('/users', userRoutes);
-
+const userRoutes = require('./Routes/userRoutes');app.use('/users', userRoutes);
 
 
 //% Connessione a MongoDB tramite Mongoose
