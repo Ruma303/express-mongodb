@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
 
-const BookSchema = new mongoose.Schema({
+const PostSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true
@@ -44,4 +44,4 @@ const BookSchema = new mongoose.Schema({
     timestamps: true // automatically add createdAt and updatedAt fields
 });
 
-module.exports = model("Book", BookSchema);
+module.exports = model("Post", PostSchema);

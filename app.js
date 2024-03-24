@@ -11,8 +11,8 @@ app.use(express.json())
     .use(express.urlencoded({ extended: true }));
 
 //, Importazione Rotte
-const bookRoutes = require('./Routes/bookRoutes');
-app.use('/books', bookRoutes);
+const postRoutes = require('./Routes/postRoutes');
+app.use('/posts', postRoutes);
 
 //% Connessione a MongoDB tramite Mongoose
 (async function run() {
