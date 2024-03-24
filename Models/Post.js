@@ -10,38 +10,17 @@ const PostSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    isbn: {
+    body: {
         type: String,
-        required: true,
-        unique: true
-    },
-    publicationDate: {
-        type: Date,
-        required: false
-    },
-    genre: {
-        type: String,
-        required: false
-    },
-    price: {
-        type: Number,
         required: true
     },
-    description: {
-        type: String,
-        required: false
-    },
-    coverImage: {
-        type: String,
-        required: false
-    },
-    stock: {
-        type: Number,
-        required: true,
-        min: 0
+    user_id: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     }
 }, {
-    timestamps: true // automatically add createdAt and updatedAt fields
+    timestamps: true
 });
 
 module.exports = model("Post", PostSchema);

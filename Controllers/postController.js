@@ -9,4 +9,13 @@ const getAllPosts = async (req, res, next) => {
     }
 }
 
-module.exports = { getAllPosts };
+const getPost = async (req, res, next) => {
+    try {
+        const post = await Post.findById(req.params.id);
+        res.status(200).json(post);
+    } catch (err) {
+        next(err);
+    }
+}
+
+module.exports = { getAllPosts, getPost };

@@ -4,3 +4,4 @@ const postController = require('../Controllers/postController');
 
 module.exports = router
     .get('/', postController.getAllPosts)
+    .get('/:id', postController.getPost);
