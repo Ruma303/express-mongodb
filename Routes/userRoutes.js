@@ -3,5 +3,5 @@ const router = express.Router();
 const userController = require('../Controllers/userController');
 
 module.exports = router
-    .get('/', userController.getAllUsers)
-    .get('/:id', userController.getUser);
+    .get('/query1', userController.query1)
+    .get('/query2', userController.query2);
